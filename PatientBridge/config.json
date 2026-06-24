@@ -1,0 +1,14 @@
+{
+    "OutputDirectory": "C:\\bdt",
+    "OutputFileName": "pat.bdt",
+    "LogDirectory": "logs",
+    "PatientIdStart": 0,
+    "PatientIdLength": 7,
+    "NameStart": 12,
+    "NameLength": 20,
+    "BirthDateStart": 34,
+    "BirthDateLength": 7,
+    "GenderStart": 41,
+    "GenderLength": 1
+  }
+  

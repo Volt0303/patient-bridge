@@ -1,0 +1,15 @@
+E:\Projects\CardReaderBridge\PatientBridge\bin\Debug\net8.0\PatientBridge.exe
+E:\Projects\CardReaderBridge\PatientBridge\bin\Debug\net8.0\PatientBridge.deps.json
+E:\Projects\CardReaderBridge\PatientBridge\bin\Debug\net8.0\PatientBridge.runtimeconfig.json
+E:\Projects\CardReaderBridge\PatientBridge\bin\Debug\net8.0\PatientBridge.dll
+E:\Projects\CardReaderBridge\PatientBridge\bin\Debug\net8.0\PatientBridge.pdb
+E:\Projects\CardReaderBridge\PatientBridge\obj\Debug\net8.0\PatientBridge.GeneratedMSBuildEditorConfig.editorconfig
+E:\Projects\CardReaderBridge\PatientBridge\obj\Debug\net8.0\PatientBridge.AssemblyInfoInputs.cache
+E:\Projects\CardReaderBridge\PatientBridge\obj\Debug\net8.0\PatientBridge.AssemblyInfo.cs
+E:\Projects\CardReaderBridge\PatientBridge\obj\Debug\net8.0\PatientBridge.csproj.CoreCompileInputs.cache
+E:\Projects\CardReaderBridge\PatientBridge\obj\Debug\net8.0\PatientBridge.sourcelink.json
+E:\Projects\CardReaderBridge\PatientBridge\obj\Debug\net8.0\PatientBridge.dll
+E:\Projects\CardReaderBridge\PatientBridge\obj\Debug\net8.0\refint\PatientBridge.dll
+E:\Projects\CardReaderBridge\PatientBridge\obj\Debug\net8.0\PatientBridge.pdb
+E:\Projects\CardReaderBridge\PatientBridge\obj\Debug\net8.0\PatientBridge.genruntimeconfig.cache
+E:\Projects\CardReaderBridge\PatientBridge\obj\Debug\net8.0\ref\PatientBridge.dll
