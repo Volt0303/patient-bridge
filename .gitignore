@@ -65,6 +65,9 @@ project.lock.json
 project.fragment.lock.json
 artifacts/
 
+# Installer output
+[Dd]ist/
+
 # OS
 Thumbs.db
 Thumbs.db:encryptable
