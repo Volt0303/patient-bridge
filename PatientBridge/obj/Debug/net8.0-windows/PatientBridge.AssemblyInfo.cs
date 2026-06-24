@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PatientBridge")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4b20cbbbfb1bd3ba5df7baec5715a203eb6402cc")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+250c05e1fa8592f4f99c8d25f3f3a2134c30cb98")]
 [assembly: System.Reflection.AssemblyProductAttribute("PatientBridge")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PatientBridge")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

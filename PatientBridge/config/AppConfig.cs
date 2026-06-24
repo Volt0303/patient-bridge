@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Microsoft.Win32;
 
 namespace PatientBridge.Config;
 
@@ -11,9 +12,9 @@ public class AppConfig
     public int PatientIdLength { get; set; } = 7;
     public int NameStart { get; set; } = 12;
     public int NameLength { get; set; } = 20;
-    public int BirthDateStart { get; set; } = 35;
+    public int BirthDateStart { get; set; } = 34;
     public int BirthDateLength { get; set; } = 7;
-    public int GenderStart { get; set; } = 42;
+    public int GenderStart { get; set; } = 41;
     public int GenderLength { get; set; } = 1;
 
     public static AppConfig Load(string path = "config.json")
@@ -23,5 +24,19 @@ public class AppConfig
 
         var json = File.ReadAllText(path);
         return JsonSerializer.Deserialize<AppConfig>(json) ?? new AppConfig();
+    }
+
+    public static void RegisterStartup(string appName, string exePath)
+    {
+        using var key = Registry.CurrentUser.OpenSubKey(
+            @"Software\Microsoft\Windows\CurrentVersion\Run", true);
+        key?.SetValue(appName, $"\"{exePath}\"");
+    }
+
+    public static void UnregisterStartup(string appName)
+    {
+        using var key = Registry.CurrentUser.OpenSubKey(
+            @"Software\Microsoft\Windows\CurrentVersion\Run", true);
+        key?.DeleteValue(appName, false);
     }
 }

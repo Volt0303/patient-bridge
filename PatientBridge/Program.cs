@@ -23,6 +23,9 @@ void OnCardScanned(string rawData)
     }
 }
 
+var exePath = Environment.ProcessPath ?? Application.ExecutablePath;
+AppConfig.RegisterStartup("PatientBridge", exePath);
+
 using var hook = new KeyboardHook(OnCardScanned);
 
 var trayIcon = new NotifyIcon
@@ -33,11 +36,14 @@ var trayIcon = new NotifyIcon
 };
 
 var exitItem = new ToolStripMenuItem("Exit");
-exitItem.Click += (_, _) => Application.Exit();
+exitItem.Click += (_, _) =>
+{
+    AppConfig.UnregisterStartup("PatientBridge");
+    trayIcon.Visible = false;
+    Application.Exit();
+};
 
 trayIcon.ContextMenuStrip = new ContextMenuStrip();
 trayIcon.ContextMenuStrip.Items.Add(exitItem);
 
 Application.Run();
-
-trayIcon.Visible = false;

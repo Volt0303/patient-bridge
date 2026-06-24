@@ -1,0 +1,16 @@
+# Build output
+bin/
+obj/
+
+# Logs
+logs/
+Logs/
+*.log
+
+# User-specific files
+*.user
+.vs/
+
+# OS
+Thumbs.db
+Desktop.ini
