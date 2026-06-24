@@ -1,4 +1,5 @@
-﻿using PatientBridge.Config;
+﻿using System.Windows.Forms;
+using PatientBridge.Config;
 using PatientBridge.Core;
 
 var config = AppConfig.Load();
@@ -7,25 +8,36 @@ var parser = new CardDataParser(config);
 var generator = new PatBdtGenerator(config);
 
 logger.LogInfo("PatientBridge started.");
-Console.WriteLine("PatientBridge running. Paste card data and press Enter:");
 
-while (true)
+void OnCardScanned(string rawData)
 {
-    var input = Console.ReadLine();
-
-    if (string.IsNullOrWhiteSpace(input))
-        continue;
-
     try
     {
-        var cardData = parser.Parse(input);
+        var cardData = parser.Parse(rawData);
         generator.Generate(cardData);
         logger.LogInfo($"Success: PatientId={cardData.PatientId}");
-        Console.WriteLine($"OK: {cardData.PatientId} {cardData.LastName} {cardData.FirstName}");
     }
     catch (Exception ex)
     {
-        logger.LogError(input, ex.Message);
-        Console.WriteLine($"ERROR: {ex.Message}");
+        logger.LogError(rawData, ex.Message);
     }
 }
+
+using var hook = new KeyboardHook(OnCardScanned);
+
+var trayIcon = new NotifyIcon
+{
+    Icon = SystemIcons.Application,
+    Text = "PatientBridge",
+    Visible = true
+};
+
+var exitItem = new ToolStripMenuItem("Exit");
+exitItem.Click += (_, _) => Application.Exit();
+
+trayIcon.ContextMenuStrip = new ContextMenuStrip();
+trayIcon.ContextMenuStrip.Items.Add(exitItem);
+
+Application.Run();
+
+trayIcon.Visible = false;
