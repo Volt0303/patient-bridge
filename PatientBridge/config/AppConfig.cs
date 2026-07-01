@@ -14,8 +14,6 @@ public class AppConfig
     public int NameLength { get; set; } = 20;
     public int BirthDateStart { get; set; } = 34;
     public int BirthDateLength { get; set; } = 7;
-    public int GenderStart { get; set; } = 41;
-    public int GenderLength { get; set; } = 1;
 
     public static AppConfig Load(string path = "config.json")
     {

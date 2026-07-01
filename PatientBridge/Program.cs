@@ -29,12 +29,19 @@ try
     {
         try
         {
-            var cardData = parser.Parse(rawData);
-            generator.Generate(cardData);
-            logger.LogInfo($"Success: PatientId={cardData.PatientId}");
+            // Always write the file. Per spec, fields that cannot be read are left
+            // blank (TAG only) rather than skipping the file entirely.
+            var result = parser.Parse(rawData);
+            generator.Generate(result.Data);
+
+            if (result.HasErrors)
+                logger.LogError(rawData, string.Join("; ", result.Errors));
+            else
+                logger.LogInfo($"Success: PatientId={result.Data.PatientId}");
         }
         catch (Exception ex)
         {
+            // Unexpected failure (e.g. cannot write the output file).
             logger.LogError(rawData, ex.Message);
         }
     }
