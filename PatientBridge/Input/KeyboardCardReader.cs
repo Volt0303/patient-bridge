@@ -2,23 +2,35 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace PatientBridge.Core;
+namespace PatientBridge.Input;
 
-public class KeyboardHook : IDisposable
+/// <summary>
+/// Reads a USB-HID card reader that emulates a keyboard (e.g. CRF-200U). A global
+/// low-level keyboard hook buffers typed characters and raises <see cref="CardScanned"/>
+/// when Enter is received. This is the only class that knows about the keyboard;
+/// swapping to another reader means providing a different <see cref="ICardReader"/>.
+/// </summary>
+public class KeyboardCardReader : ICardReader
 {
     private const int WH_KEYBOARD_LL = 13;
     private const int WM_KEYDOWN = 0x0100;
 
     private readonly LowLevelKeyboardProc _proc;
-    private readonly nint _hookId;
     private readonly System.Text.StringBuilder _buffer = new();
-    private readonly Action<string> _onCardScanned;
+    private nint _hookId;
 
-    public KeyboardHook(Action<string> onCardScanned)
+    public event Action<string>? CardScanned;
+
+    public KeyboardCardReader()
     {
-        _onCardScanned = onCardScanned;
+        // Keep the delegate alive for the lifetime of the reader so it is not GC'd.
         _proc = HookCallback;
-        _hookId = SetHook(_proc);
+    }
+
+    public void Start()
+    {
+        if (_hookId == 0)
+            _hookId = SetHook(_proc);
     }
 
     private nint SetHook(LowLevelKeyboardProc proc)
@@ -41,7 +53,7 @@ public class KeyboardHook : IDisposable
                 var scanned = _buffer.ToString();
                 _buffer.Clear();
                 if (!string.IsNullOrWhiteSpace(scanned))
-                    _onCardScanned(scanned);
+                    CardScanned?.Invoke(scanned);
             }
             else
             {
@@ -69,7 +81,11 @@ public class KeyboardHook : IDisposable
 
     public void Dispose()
     {
-        UnhookWindowsHookEx(_hookId);
+        if (_hookId != 0)
+        {
+            UnhookWindowsHookEx(_hookId);
+            _hookId = 0;
+        }
     }
 
     private delegate nint LowLevelKeyboardProc(int nCode, nint wParam, nint lParam);

@@ -1,5 +1,10 @@
-namespace PatientBridge.Core;
+namespace PatientBridge.Logging;
 
+/// <summary>
+/// Appends timestamped entries to daily log files (info_YYYYMMDD.log / error_YYYYMMDD.log)
+/// under the given directory. Used by the notification layer; not referenced by the
+/// parser or output code.
+/// </summary>
 public class AppLogger
 {
     private readonly string _logDirectory;

@@ -1,42 +1,29 @@
 using PatientBridge.Config;
 
-namespace PatientBridge.Core;
+namespace PatientBridge.Parsing;
 
-public class CardData
-{
-    public string PatientId { get; set; } = "";
-    public string LastName { get; set; } = "";
-    public string FirstName { get; set; } = "";
-    public string BirthDate { get; set; } = "";
-    public string Gender { get; set; } = "";
-}
-
-public class ParseResult
-{
-    public CardData Data { get; } = new();
-    public List<string> Errors { get; } = new();
-    public bool HasErrors => Errors.Count > 0;
-}
-
-public class CardDataParser
+/// <summary>
+/// Parses fixed-width card text using the field offsets in <see cref="AppConfig"/>.
+/// Field mappings (start/length) live in config.json so they can be changed without
+/// recompiling. Each field is parsed independently: a field that cannot be read is
+/// left blank and its error recorded, while the other fields still come through.
+/// </summary>
+public class FixedWidthCardParser : ICardParser
 {
     private readonly AppConfig _config;
 
-    public CardDataParser(AppConfig config)
+    public FixedWidthCardParser(AppConfig config)
     {
         _config = config;
     }
 
-    // Parses each field independently. A field that cannot be read is left blank
-    // (spec: "データが正常に読み込まれない場合は、データをブランクにしておくこと（TAG のみ）")
-    // and its error is recorded, but the other fields are still returned.
-    public ParseResult Parse(string rawData)
+    public ParseResult Parse(string rawText)
     {
         var result = new ParseResult();
 
         try
         {
-            result.Data.PatientId = Slice(rawData, _config.PatientIdStart, _config.PatientIdLength);
+            result.Data.PatientId = Slice(rawText, _config.PatientIdStart, _config.PatientIdLength);
         }
         catch (Exception ex)
         {
@@ -45,7 +32,7 @@ public class CardDataParser
 
         try
         {
-            var fullName = Slice(rawData, _config.NameStart, _config.NameLength);
+            var fullName = Slice(rawText, _config.NameStart, _config.NameLength);
             // Surname and given name are separated by a space (spec §4).
             var parts = fullName.Split(' ', 2);
             result.Data.LastName = parts[0];
@@ -58,7 +45,7 @@ public class CardDataParser
 
         try
         {
-            var birthDateRaw = Slice(rawData, _config.BirthDateStart, _config.BirthDateLength);
+            var birthDateRaw = Slice(rawText, _config.BirthDateStart, _config.BirthDateLength);
             result.Data.BirthDate = JapaneseEraConverter.ToWesternDate(birthDateRaw);
         }
         catch (Exception ex)
@@ -72,7 +59,7 @@ public class CardDataParser
         return result;
     }
 
-    // Returns the trimmed slice, or throws if the raw data is too short for the field.
+    // Returns the trimmed slice, or throws if the raw text is too short for the field.
     private static string Slice(string s, int start, int length)
     {
         if (start < 0 || start >= s.Length)

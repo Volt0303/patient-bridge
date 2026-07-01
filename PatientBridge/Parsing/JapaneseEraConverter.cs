@@ -1,5 +1,9 @@
-namespace PatientBridge.Core;
+namespace PatientBridge.Parsing;
 
+/// <summary>
+/// Converts a Japanese-era birth date (e.g. "H121231") to western DDMMYYYY.
+/// Era base years are defined here; add a new era by adding one switch arm.
+/// </summary>
 public static class JapaneseEraConverter
 {
     public static string ToWesternDate(string eraDate)
